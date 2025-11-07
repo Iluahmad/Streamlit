@@ -161,7 +161,7 @@ class NigeriaFiscalModel:
 # ======================
 
 st.set_page_config(
-    page_title="Nigeria Fiscal Simulator",
+    page_title="📊 Nigeria Fiscal Simulator",
     page_icon="🇳🇬",
     layout="wide"
 )
@@ -204,7 +204,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-header">🇳🇬 Nigeria Fiscal Policy Simulator</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">📊 Nigeria Fiscal Policy Simulator</div>', unsafe_allow_html=True)
 
 # Sidebar controls
 st.sidebar.header("🎛️ Policy Controls")
