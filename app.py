@@ -1,4 +1,4 @@
-# nigeria_fiscal_simulator.py
+# nigeria_fiscal_simulator_complete.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -161,8 +161,8 @@ class NigeriaFiscalModel:
 # ======================
 
 st.set_page_config(
-    page_title="📊 Nigeria Fiscal Simulator",
-    page_icon="🇳🇬",
+    page_title="Nigeria Fiscal Simulator",
+    page_icon="📊",
     layout="wide"
 )
 
@@ -180,10 +180,17 @@ st.markdown("""
         padding: 0.5rem;
         border-radius: 0.5rem;
     }
+    .metric-container {
+        background-color: #f0f2f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border-left: 4px solid #008751;
+        margin-bottom: 1rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-header"> Nigeria Fiscal Policy Simulator</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">📊 Nigeria Fiscal Policy Simulator</div>', unsafe_allow_html=True)
 
 # Sidebar controls
 st.sidebar.header("🎛️ Policy Controls")
@@ -226,10 +233,10 @@ def run_enhanced_model(tax_change, spending_change, growth_rate, oil_shock):
 
 results_df = run_enhanced_model(tax_change, spending_change, baseline_growth, oil_price_shock)
 
-# Key Metrics Dashboard
+# Key Metrics Dashboard - Enhanced with 5 Columns including Nominal GDP
 st.subheader("📊 Key Fiscal Indicators")
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
     debt_change = results_df['Debt_to_GDP'].iloc[-1] - results_df['Debt_to_GDP'].iloc[0]
@@ -262,6 +269,47 @@ with col4:
         f"{results_df['Interest_Rate'].iloc[-1]:.1f}%",
         f"{interest_rate_change:+.1f}%"
     )
+
+with col5:
+    # Enhanced Nominal GDP Analysis
+    initial_gdp = results_df['GDP'].iloc[0]
+    final_gdp = results_df['GDP'].iloc[-1]
+    total_gdp_growth = ((final_gdp - initial_gdp) / initial_gdp) * 100
+    
+    # Calculate baseline scenario (no policy changes)
+    baseline_gdp = initial_gdp
+    baseline_path = [initial_gdp]
+    for year in range(4):  # 5 years total (0-4)
+        baseline_gdp = baseline_gdp * (1 + baseline_growth/100)
+        baseline_path.append(baseline_gdp)
+    
+    baseline_final_gdp = baseline_path[-1]
+    
+    # Policy impact in absolute terms
+    policy_impact_abs = final_gdp - baseline_final_gdp
+    policy_impact_percent = (policy_impact_abs / baseline_final_gdp) * 100
+    
+    # Determine if policy is growth-enhancing or contractionary
+    if policy_impact_abs > 5:  # More than $5B positive impact
+        delta_color = "normal"
+        impact_label = "growth-added"
+    elif policy_impact_abs < -5:  # More than $5B negative impact  
+        delta_color = "inverse"
+        impact_label = "growth-lost"
+    else:
+        delta_color = "off"
+        impact_label = "neutral"
+    
+    st.metric(
+        "Economy Size (Year 5)", 
+        f"${final_gdp:,.0f}B",
+        f"${policy_impact_abs:+,.0f}B {impact_label}",
+        delta_color=delta_color
+    )
+    
+    # Rich context below the metric
+    st.progress(min(100, max(0, int((final_gdp / (initial_gdp * 1.5)) * 100))), 
+                text=f"↑{total_gdp_growth:.1f}% from ${initial_gdp:,.0f}B")
 
 # Enhanced Visualizations
 st.subheader("📈 Comprehensive Fiscal Analysis")
@@ -344,8 +392,43 @@ with tab3:
                                    y=results_df['GDP_Growth'],
                                    line=dict(color='black', width=3)))
     
-    fig_growth.update_layout(barmode='relative', title='GDP Growth Decomposition')
+    fig_growth.update_layout(barmode='relative', title='GDP Growth Decomposition',
+                           yaxis_title='Percentage Points')
     st.plotly_chart(fig_growth, use_container_width=True)
+
+with tab4:
+    # Fiscal space analysis
+    fig_sustainability = make_subplots(
+        rows=2, cols=1,
+        subplot_titles=('Fiscal Space Analysis', 'Debt Service vs Revenue'),
+        specs=[[{"secondary_y": False}], [{"secondary_y": False}]]
+    )
+    
+    # Fiscal space (revenue minus mandatory spending)
+    results_df['Fiscal_Space'] = results_df['Total_Revenue'] - results_df['Debt_Service'] - (results_df['Spending'] * 0.7)  # Assume 70% is mandatory
+    
+    fig_sustainability.add_trace(
+        go.Scatter(x=results_df['Year'], y=results_df['Fiscal_Space'], 
+                   name="Fiscal Space", line=dict(color='green', width=3),
+                   fill='tozeroy'),
+        row=1, col=1
+    )
+    
+    # Debt service as % of revenue
+    results_df['Debt_Service_Ratio'] = (results_df['Debt_Service'] / results_df['Total_Revenue']) * 100
+    
+    fig_sustainability.add_trace(
+        go.Scatter(x=results_df['Year'], y=results_df['Debt_Service_Ratio'], 
+                   name="Debt Service/Revenue", line=dict(color='red', width=3)),
+        row=2, col=1
+    )
+    
+    # Add threshold lines
+    fig_sustainability.add_hline(y=30, line_dash="dash", line_color="red", 
+                                annotation_text="Danger Zone (30%)", row=2, col=1)
+    
+    fig_sustainability.update_layout(height=600, showlegend=True)
+    st.plotly_chart(fig_sustainability, use_container_width=True)
 
 # Policy Insights
 st.subheader("💡 Nigeria-Specific Policy Insights")
@@ -386,6 +469,38 @@ with col2:
     elif current_condition == "high_debt":
         st.warning("**Recommendation**: Fiscal consolidation needed to restore confidence")
 
+# Economic Value Creation Summary
+st.subheader("💰 Economic Value Creation Summary")
+
+# Calculate comprehensive economic impact
+initial_gdp = results_df['GDP'].iloc[0]
+final_gdp = results_df['GDP'].iloc[-1]
+cumulative_gdp = results_df['GDP'].sum()
+baseline_cumulative = sum([initial_gdp * (1 + baseline_growth/100)**i for i in range(5)])
+
+total_value_added = cumulative_gdp - baseline_cumulative
+value_per_capita = total_value_added / 200  # Nigeria population ~200M
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric("Total Economic Value Added", f"${total_value_added:+,.0f}B", 
+              "5-year cumulative vs baseline")
+
+with col2:
+    st.metric("Per Capita Impact", f"${value_per_capita:+,.0f}", 
+              "Per Nigerian citizen")
+
+with col3:
+    final_debt_service_ratio = (results_df['Debt_Service'].iloc[-1] / results_df['Total_Revenue'].iloc[-1]) * 100
+    st.metric("Debt Service Burden", f"{final_debt_service_ratio:.1f}%", 
+              "of revenue")
+
+with col4:
+    fiscal_space_ratio = (results_df['Fiscal_Space'].iloc[-1] / results_df['Total_Revenue'].iloc[-1]) * 100
+    st.metric("Available Fiscal Space", f"{fiscal_space_ratio:.1f}%", 
+              "for new initiatives")
+
 # Enhanced data table
 with st.expander("📋 Detailed Projection Data"):
     display_df = results_df.copy()
@@ -399,6 +514,7 @@ with st.expander("📋 Detailed Projection Data"):
     display_df['GDP_Growth'] = display_df['GDP_Growth'].round(1)
     display_df['Interest_Rate'] = display_df['Interest_Rate'].round(1)
     display_df['Oil_Price'] = display_df['Oil_Price'].round(1)
+    display_df['Crowding_Out_Effect'] = display_df['Crowding_Out_Effect'].round(2)
     
     st.dataframe(display_df)
 
@@ -427,12 +543,17 @@ with st.expander("🔬 Enhanced Methodology"):
     - Higher interest rates discourage private investment
     - Model captures both direct and indirect crowding out
     
+    💰 **Economic Value Measurement:**
+    - Tracks nominal GDP growth and policy impact in absolute terms
+    - Calculates cumulative economic value added vs baseline
+    - Estimates per-capita impact on citizens
+    
     **Key Policy Variables:**
     - Debt sustainability thresholds (50%, 70% of GDP)
     - Oil revenue dependency (target < 30%)
     - Interest rate risk premium dynamics
+    - Fiscal space for development spending
     """)
 
 st.markdown("---")
-st.markdown("*Nigeria Fiscal Simulator v2.0 - Incorporating oil dependency and debt feedback effects*")
-st.markdown("Ahmad Ilu | @iluahmad_ ")
+st.markdown("*Nigeria Fiscal Simulator v2.0 - Incorporating oil dependency, debt feedback effects, and economic value measurement*")
