@@ -1,4 +1,4 @@
-# nigeria_fiscal_simulator_with_mechanics.py
+# nigeria_fiscal_simulator_complete.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -161,7 +161,7 @@ class NigeriaFiscalModel:
 # ======================
 
 st.set_page_config(
-    page_title=" Nigeria Fiscal Simulator",
+    page_title="Nigeria Fiscal Simulator",
     page_icon="📊",
     layout="wide"
 )
@@ -193,6 +193,8 @@ st.markdown("""
         border-left: 4px solid #008751;
         font-family: "Courier New", monospace;
         margin: 10px 0;
+        border-radius: 5px;
+        white-space: pre-wrap;
     }
     .mechanic-box {
         background-color: #e8f4fd;
@@ -201,10 +203,21 @@ st.markdown("""
         border-left: 4px solid #1f77b4;
         margin: 10px 0;
     }
+    .step-header {
+        color: #008751;
+        font-weight: bold;
+        margin-top: 20px;
+        border-bottom: 2px solid #008751;
+        padding-bottom: 5px;
+    }
+    .threshold-table {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-header">📊 Fictional Nigeria Fiscal Policy Simulator</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">Fictional Nigeria Fiscal Policy Simulator</div>', unsafe_allow_html=True)
 
 # Sidebar controls
 st.sidebar.header("🎛️ Policy Controls")
@@ -446,11 +459,9 @@ with tab4:
 
 with tab5:
     st.header("🔬 Complete Model Mechanics")
-    st.markdown("""
-    ## 🏗️ Core Economic Architecture
     
-    ### **1. Initial State Setup (Nigeria-Specific Baseline)**
-    """)
+    # Initial State
+    st.markdown('<div class="step-header">🏗️ CORE ECONOMIC ARCHITECTURE</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -476,42 +487,34 @@ with tab5:
         - Oil Revenue Sensitivity: $0.33B per $1 oil price
         """)
     
+    # Simulation Engine
+    st.markdown('<div class="step-header">🔄 ANNUAL SIMULATION ENGINE</div>', unsafe_allow_html=True)
+    
+    # Step 1
+    st.markdown("**Step 1: Oil Revenue Calculation**")
+    st.markdown('<div class="equation">Oil_Revenueₜ = Oil_Price × (1 + Oil_Price_Shock/100) × Oil_Revenue_per_Dollar</div>', unsafe_allow_html=True)
     st.markdown("""
-    ---
+    <div class="mechanic-box">
+    <strong>Mechanic:</strong> Oil price shocks directly impact government revenue<br>
+    <strong>Example:</strong> ±20% oil price → ±$4.7B revenue impact<br>
+    <strong>Economic Impact:</strong> Direct fiscal shock affecting spending capacity
+    </div>
+    """, unsafe_allow_html=True)
     
-    ## 🔄 Annual Simulation Engine
-    
-    ### **Step 1: Oil Revenue Calculation**
-    """)
-    
-    st.markdown('<div class="equation">Oil Revenue<sub>t</sub> = Oil Price × (1 + Oil Price Shock) × Oil Revenue per Dollar</div>', unsafe_allow_html=True)
-    
+    # Step 2
+    st.markdown("**Step 2: Non-Oil Revenue with Growth Feedback**")
+    st.markdown('<div class="equation">Non_Oil_Revenueₜ = Non_Oil_Revenueₜ₋₁ × (1 + Tax_Change/100) × (1 + Growth_Rate/100)</div>', unsafe_allow_html=True)
     st.markdown("""
-    **Mechanic**: 
-    - Oil price shocks directly impact government revenue
-    - ±20% oil price → ±$4.7B revenue impact
-    - ±30% oil price → ±$7.7B revenue impact
+    <div class="mechanic-box">
+    <strong>Dual Effects:</strong><br>
+    1. <strong>Policy Effect:</strong> Tax change (e.g., +10% better collection)<br>
+    2. <strong>Economic Effect:</strong> Growth assumption (e.g., +3% expansion)<br>
+    <strong>Economic Rationale:</strong> Tax revenues are endogenous - they grow with the economy
+    </div>
+    """, unsafe_allow_html=True)
     
-    **Economic Impact**: Direct fiscal shock affecting spending capacity
-    """)
-    
-    st.markdown("""
-    ### **Step 2: Non-Oil Revenue with Growth Feedback**
-    """)
-    
-    st.markdown('<div class="equation">Non-Oil Revenue<sub>t</sub> = Non-Oil Revenue<sub>t-1</sub> × (1 + Tax Change) × (1 + Growth Rate)</div>', unsafe_allow_html=True)
-    
-    st.markdown("""
-    **Dual Effects**:
-    1. **Policy Effect**: Tax change (e.g., +10% better collection)
-    2. **Economic Effect**: Growth assumption (e.g., +3% expansion)
-    
-    **Economic Rationale**: Tax revenues are endogenous - they grow with the economy
-    """)
-    
-    st.markdown("""
-    ### **Step 3: Dynamic Multiplier System**
-    """)
+    # Step 3
+    st.markdown("**Step 3: Dynamic Multiplier System**")
     
     multiplier_data = {
         'Economic Condition': ['Recession', 'Normal', 'Boom', 'High Debt'],
@@ -528,203 +531,233 @@ with tab5:
     st.dataframe(multiplier_df, use_container_width=True)
     
     st.markdown("""
-    **Empirical Basis**: IMF research shows multipliers vary by economic cycle
-    """)
+    <div class="mechanic-box">
+    <strong>Empirical Basis:</strong> IMF research shows multipliers vary by economic cycle and fiscal space<br>
+    <strong>Policy Implication:</strong> Fiscal stimulus most effective during recessions, least effective with high debt
+    </div>
+    """, unsafe_allow_html=True)
     
+    # Step 4
+    st.markdown("**Step 4: Debt-Driven Interest Rate Mechanism**")
+    st.markdown('<div class="equation">Effective_Interest_Rate = Base_Rate + Risk_Premium</div>', unsafe_allow_html=True)
+    st.markdown('<div class="equation">Risk_Premium = max(0, (Debt_to_GDP - 50) × 0.15) if Debt_to_GDP > 50 else min(0, (30 - Debt_to_GDP) × -0.1)</div>', unsafe_allow_html=True)
+    
+    interest_examples = {
+        'Debt/GDP': ['25%', '40%', '60%', '80%'],
+        'Risk Premium': ['-0.5%', '0%', '+1.5%', '+4.5%'],
+        'Effective Rate': ['11.5%', '12.0%', '13.5%', '16.5%'],
+        'Economic Consequence': ['Fiscal virtue rewarded', 'Neutral zone', 'Moderate risk premium', 'Debt distress territory']
+    }
+    st.dataframe(pd.DataFrame(interest_examples), use_container_width=True)
+    
+    # Step 5
+    st.markdown("**Step 5: Debt Service Calculation**")
+    st.markdown('<div class="equation">Debt_Service = Debt × (Effective_Interest_Rate / 100)</div>', unsafe_allow_html=True)
     st.markdown("""
-    ### **Step 4: Debt-Driven Interest Rate Mechanism**
-    """)
+    <div class="mechanic-box">
+    <strong>Example:</strong> $140B debt at 13.5% → $18.9B debt service (31.5% of total revenue)<br>
+    <strong>Fiscal Impact:</strong> Debt service is non-discretionary - must be paid before other spending<br>
+    <strong>Crowding Out:</strong> High debt service reduces funds for productive investment
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.markdown('<div class="equation">Effective Interest Rate = Base Rate + Risk Premium</div>', unsafe_allow_html=True)
-    
-    st.markdown("""
-    **Risk Premium Calculation**:
-    - Debt/GDP < 30%: Negative premium (fiscal virtue rewarded)
-    - Debt/GDP 30-50%: Zero premium (neutral zone)
-    - Debt/GDP > 50%: +0.15% per 1% above 50% (rising risk)
-    
-    **Economic Rationale**: Sovereign bond markets charge higher rates as debt sustainability concerns increase
-    """)
-    
-    st.markdown("""
-    ### **Step 5: Debt Service Calculation**
-    """)
-    
-    st.markdown('<div class="equation">Debt Service = Debt × (Effective Interest Rate / 100)</div>', unsafe_allow_html=True)
-    
-    st.markdown("""
-    **Example**: 
-    - $140B debt at 13.5% → $18.9B debt service
-    - This is **31.5% of total revenue** - crowding out productive spending
-    
-    **Fiscal Impact**: Debt service is non-discretionary - must be paid before other spending
-    """)
-    
-    st.markdown("""
-    ### **Step 6: Fiscal Impact on GDP**
-    """)
-    
+    # Step 6
+    st.markdown("**Step 6: Fiscal Impact on GDP**")
     st.markdown("""
     <div class="equation">
-    Fiscal Impact = [Spending Change × (Spending - Debt Service) × Spending Multiplier +<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tax Change × Non-Oil Revenue × Tax Multiplier] ÷ GDP
+    Fiscal_Impact = [Spending_Change × (Spending - Debt_Service) × Spending_Multiplier + 
+                     Tax_Change × Non_Oil_Revenue × Tax_Multiplier] ÷ GDP
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("""
-    **Decomposition**:
-    1. **Spending Impact**: Only discretionary spending (total spending - debt service) stimulates economy
-    2. **Tax Impact**: Tax cuts stimulate, tax hikes contract (smaller multiplier than spending)
+    <div class="mechanic-box">
+    <strong>Decomposition:</strong><br>
+    1. <strong>Spending Impact:</strong> Only discretionary spending (total spending - debt service) stimulates economy<br>
+    2. <strong>Tax Impact:</strong> Tax cuts stimulate, tax hikes contract (smaller multiplier than spending)<br><br>
     
-    **Example Calculation**:
-    - Spending increase: +10% on $53.1B → $5.31B × 0.6 multiplier = $3.19B GDP impact
-    - Tax cut: -5% on $39.66B → -$1.98B × 0.3 multiplier = -$0.59B GDP impact  
-    - Net fiscal impact = ($3.19B - $0.59B) / $450B = **0.58% of GDP**
-    """)
+    <strong>Example Calculation:</strong><br>
+    - Spending increase: +10% on $53.1B → $5.31B × 0.6 multiplier = $3.19B GDP impact<br>
+    - Tax cut: -5% on $39.66B → -$1.98B × 0.3 multiplier = -$0.59B GDP impact<br>  
+    - Net fiscal impact = ($3.19B - $0.59B) / $450B = <strong>0.58% of GDP</strong>
+    </div>
+    """, unsafe_allow_html=True)
     
+    # Step 7
+    st.markdown("**Step 7: Crowding-Out Effect**")
+    st.markdown('<div class="equation">Crowding_Out_Effect = max(0, (Debt_Service - Baseline_Service) ÷ GDP) × 100</div>', unsafe_allow_html=True)
     st.markdown("""
-    ### **Step 7: Crowding-Out Effect**
-    """)
+    <div class="mechanic-box">
+    <strong>Mechanic:</strong> Rising debt service reduces funds for productive investment<br>
+    <strong>Channel:</strong> Higher interest rates discourage private investment<br>
+    <strong>Example:</strong> Debt service increases from $16.8B to $18.9B → Crowding out = ($18.9B - $16.8B) / $450B = <strong>0.47% GDP drag</strong>
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.markdown('<div class="equation">Crowding Out Effect = max(0, (Debt Service - Baseline Service) ÷ GDP) × 100</div>', unsafe_allow_html=True)
-    
+    # Step 8
+    st.markdown("**Step 8: Final Growth Calculation**")
+    st.markdown('<div class="equation">Effective_Growth = Baseline_Growth + Fiscal_Impact - Crowding_Out_Effect</div>', unsafe_allow_html=True)
     st.markdown("""
-    **Mechanic**: 
-    - Rising debt service reduces funds for productive investment
-    - Higher interest rates discourage private investment
-    - Creates a **drag on economic growth**
-    
-    **Example**: 
-    - Debt service increases from $16.8B to $18.9B
-    - Crowding out = ($18.9B - $16.8B) / $450B = **0.47% GDP drag**
-    """)
-    
-    st.markdown("""
-    ### **Step 8: Final Growth Calculation**
-    """)
-    
-    st.markdown('<div class="equation">Effective Growth = Baseline Growth + Fiscal Impact - Crowding Out Effect</div>', unsafe_allow_html=True)
-    
-    st.markdown("""
-    **Complete Growth Decomposition**:
-    ```
-    Effective Growth = 3.0%   [Baseline]
+    <div class="equation">
+    Complete Growth Decomposition:
+    Effective_Growth = 3.0%   [Baseline]
                      + 0.58%  [Fiscal stimulus]  
                      - 0.47%  [Crowding out]
                      = 3.11%  [Final growth]
-    ```
-    """)
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.markdown("""
-    ### **Step 9: Update Economic Variables**
-    """)
-    
+    # Step 9
+    st.markdown("**Step 9: Update Economic Variables**")
     st.markdown("""
     <div class="equation">
-    GDP<sub>t</sub> = GDP<sub>t-1</sub> × (1 + Effective Growth ÷ 100)<br>
-    Deficit<sub>t</sub> = Spending + Debt Service - Total Revenue<br>
-    Debt<sub>t</sub> = Debt<sub>t-1</sub> + Deficit<sub>t</sub><br>
-    Debt/GDP<sub>t</sub> = (Debt<sub>t</sub> ÷ GDP<sub>t</sub>) × 100
+    GDPₜ = GDPₜ₋₁ × (1 + Effective_Growth ÷ 100)
+    Deficitₜ = Spending + Debt_Service - Total_Revenue
+    Debtₜ = Debtₜ₋₁ + Deficitₜ
+    Debt_to_GDPₜ = (Debtₜ ÷ GDPₜ) × 100
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("""
-    **Stock-Flow Consistency**: 
-    - GDP grows based on effective growth rate
-    - Deficit = Spending + Interest - Revenue
-    - Debt accumulates year-to-year
+    <div class="mechanic-box">
+    <strong>Stock-Flow Consistency:</strong><br>
+    - GDP grows based on effective growth rate<br>
+    - Deficit = Spending + Interest - Revenue<br>
+    - Debt accumulates year-to-year<br>
     - Debt/GDP ratio changes based on both numerator (debt) and denominator (GDP)
-    """)
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.markdown("""
-    ---
+    # Key Mechanisms
+    st.markdown('<div class="step-header">🎯 KEY ECONOMIC MECHANISMS</div>', unsafe_allow_html=True)
     
-    ## 🎯 Key Economic Mechanisms
+    col1, col2 = st.columns(2)
     
-    ### **1. Oil Dependency Feedback Loop**
-    ```
-    Oil Price Shock → Revenue Change → Fiscal Space Change → Spending Capacity → Economic Growth
-    ```
+    with col1:
+        st.markdown("""
+        **🛢️ Oil Dependency Feedback Loop:**
+        ```
+        Oil Price Shock → Revenue Change → 
+        Fiscal Space → Spending Capacity → 
+        Economic Growth
+        ```
+        
+        **Vulnerability:** -30% oil price → -$7.7B revenue → 
+        Either cut spending or increase deficit → 
+        Both reduce growth
+        """)
     
-    **Vulnerability**: -30% oil price shock → -$7.7B revenue → Either cut spending or increase deficit → Both reduce growth
+    with col2:
+        st.markdown("""
+        **📈 Debt-Growth Vicious Cycle:**
+        ```
+        Higher Debt → Higher Interest Rates → 
+        More Debt Service → Less Productive Spending → 
+        Lower Growth → Higher Debt/GDP
+        ```
+        
+        **Virtuous Cycle:**
+        ```
+        Lower Debt → Lower Interest Rates → 
+        Less Debt Service → More Productive Spending → 
+        Higher Growth → Lower Debt/GDP
+        ```
+        """)
     
-    ### **2. Debt-Growth Vicious/Virtuous Cycle**
-    
-    **Vicious Cycle**:
-    ```
-    Higher Debt → Higher Interest Rates → More Debt Service → Less Productive Spending → Lower Growth → Higher Debt/GDP
-    ```
-    
-    **Virtuous Cycle**:
-    ```
-    Lower Debt → Lower Interest Rates → Less Debt Service → More Productive Spending → Higher Growth → Lower Debt/GDP
-    ```
-    """)
-    
-    st.markdown("""
-    ### **3. Critical Thresholds & Non-Linearities**
-    """)
+    # Critical Thresholds
+    st.markdown('<div class="step-header">⚠️ CRITICAL THRESHOLDS & NON-LINEARITIES</div>', unsafe_allow_html=True)
     
     threshold_data = {
         'Indicator': ['Debt/GDP Ratio', 'Oil Revenue Share', 'Debt Service/Revenue'],
         'Safe Zone': ['< 30%', '< 30%', '< 15%'],
         'Caution Zone': ['30-50%', '30-60%', '15-30%'],
-        'Danger Zone': ['> 50%', '> 60%', '> 30%']
+        'Danger Zone': ['> 50%', '> 60%', '> 30%'],
+        'Policy Implication': [
+            'Fiscal space available',
+            'Resilient to oil shocks', 
+            'Sustainable debt burden'
+        ]
     }
-    threshold_df = pd.DataFrame(threshold_data)
-    st.dataframe(threshold_df, use_container_width=True)
+    st.dataframe(pd.DataFrame(threshold_data), use_container_width=True)
     
+    # Policy Transmission Channels
+    st.markdown('<div class="step-header">📈 POLICY TRANSMISSION CHANNELS</div>', unsafe_allow_html=True)
+    
+    channels_data = {
+        'Channel': ['Direct Fiscal Stimulus', 'Tax Policy Incentives', 'Debt Sustainability', 'Oil Revenue Volatility'],
+        'Mechanism': [
+            'Government Spending → Aggregate Demand → GDP Growth',
+            'Tax Cuts → Disposable Income → Consumption → GDP Growth', 
+            'Debt Levels → Investor Confidence → Interest Rates → Investment → Growth',
+            'Oil Prices → Fiscal Revenues → Spending Consistency → Economic Stability'
+        ],
+        'Effectiveness': ['High in recessions', 'Moderate, depends on MPC', 'Non-linear threshold effects', 'High volatility impact'],
+        'Key Consideration': ['Import leakage in open economies', 'Marginal propensity to consume', 'Debt sustainability thresholds', 'Revenue diversification needed']
+    
+    }
+    
+    st.dataframe(pd.DataFrame(channels_data), use_container_width=True)
+
     st.markdown("""
     ---
     
-    ## 📈 Policy Transmission Channels
+    ## Summary of Key Channels:
     
-    ### **Channel 1: Direct Fiscal Stimulus**
+    #### **Channel 1: Direct Fiscal Stimulus**
     ```
     Government Spending → Aggregate Demand → GDP Growth
     ```
     - Most effective in recessions
     - Weakened by import leakage in open economies
     
-    ### **Channel 2: Tax Policy Incentives**
+    #### **Channel 2: Tax Policy Incentives**
     ```
     Tax Cuts → Disposable Income → Consumption → GDP Growth
     ```
     - Smaller impact than direct spending
     - Depends on marginal propensity to consume
     
-    ### **Channel 3: Debt Sustainability**
+    #### **Channel 3: Debt Sustainability**
     ```
     Debt Levels → Investor Confidence → Interest Rates → Investment → Growth
     ```
     - Non-linear: small effects until thresholds, then rapid deterioration
     
-    ### **Channel 4: Oil Revenue Volatility**
+    #### **Channel 4: Oil Revenue Volatility**
     ```
     Oil Prices → Fiscal Revenues → Spending Consistency → Economic Stability
     ```
     - Pro-cyclicality risk: spend in booms, austerity in busts
     """)
     
-    st.markdown("""
-    ---
     
-    ## ⚠️ Model Limitations & Real-World Complexities
+    # Model Limitations
+    st.markdown('<div class="step-header">🔬 MODEL LIMITATIONS & ENHANCEMENTS</div>', unsafe_allow_html=True)
     
-    ### **Simplifications in Current Model**:
-    1. **Constant Elasticities**: Multipliers and risk premiums are simplified
-    2. **No Monetary Policy**: Central bank reaction function not included  
-    3. **No Exchange Rates**: Currency valuation effects not modeled
-    4. **No Distributional Effects**: Aggregate analysis only
-    5. **No Time Lags**: Immediate effects rather than delayed impacts
+    col1, col2 = st.columns(2)
     
-    ### **Real-World Additions Needed**:
-    1. **Sectoral Detail**: Oil vs. agriculture vs. services
-    2. **Regional Distribution**: Federal vs. state dynamics
-    3. **External Sector**: Current account, capital flows
-    4. **Institutional Quality**: Corruption, efficiency factors
-    5. **Demographics**: Population growth, youth bulge effects
-    """)
+    with col1:
+        st.error("""
+        **Current Simplifications:**
+        - Constant elasticities and multipliers
+        - No monetary policy reaction function  
+        - No exchange rate or trade effects
+        - No distributional or regional effects
+        - Immediate rather than delayed impacts
+        - No behavioral expectations formation
+        """)
+    
+    with col2:
+        st.success("""
+        **Enhanced Version Could Include:**
+        - Sectoral detail (oil vs. agriculture)
+        - Regional distribution (federal vs state)
+        - External sector (current account, flows)
+        - Institutional quality factors
+        - Demographic dynamics
+        - Climate change impacts
+        - Digital economy effects
+        """)
 
 # Policy Insights
 st.subheader("💡 Nigeria-Specific Policy Insights")
@@ -812,7 +845,21 @@ with st.expander("📋 Detailed Projection Data"):
     display_df['Oil_Price'] = display_df['Oil_Price'].round(1)
     display_df['Crowding_Out_Effect'] = display_df['Crowding_Out_Effect'].round(2)
     
-    st.dataframe(display_df)
+    st.dataframe(display_df.style.format({
+        'GDP': '${:,.1f}B',
+        'Oil_Revenue': '${:,.1f}B', 
+        'Non_Oil_Revenue': '${:,.1f}B',
+        'Total_Revenue': '${:,.1f}B',
+        'Spending': '${:,.1f}B',
+        'Debt_Service': '${:,.1f}B',
+        'Deficit': '${:,.1f}B',
+        'Debt': '${:,.1f}B',
+        'Debt_to_GDP': '{:.1f}%',
+        'GDP_Growth': '{:.1f}%',
+        'Interest_Rate': '{:.1f}%',
+        'Oil_Price': '${:.1f}',
+        'Crowding_Out_Effect': '{:.2f}%'
+    }))
 
 # Methodology
 with st.expander("🔬 Enhanced Methodology"):
