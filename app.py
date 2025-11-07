@@ -854,3 +854,5 @@ with st.expander("🔬 Enhanced Methodology"):
 st.markdown("---")
 st.markdown("*Nigeria Fiscal Simulator v2.0 - Complete with Technical Mechanics Documentation*")
 st.markdown("*Ahmad Ilu | @Iluahmad_*")
+st.markdown("---")
+st.markdown(" Toy Model © ® ™ 2025. All rights reserved. ")
