@@ -435,3 +435,4 @@ with st.expander("🔬 Enhanced Methodology"):
 
 st.markdown("---")
 st.markdown("*Nigeria Fiscal Simulator v2.0 - Incorporating oil dependency and debt feedback effects*")
+st.markdown("*Ahmad Ilu | @iluahmad_ *")
