@@ -130,7 +130,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-header">Nigeria Integrated Fiscal-Monetary Policy Simulator</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header"> Fictional Nigeria Fiscal-Monetary Policy Simulator</div>', unsafe_allow_html=True)
 
 # Custom Parameters Expander
 with st.expander("⚙️ Custom Model Parameters (Click to customize initial conditions)", expanded=False):
@@ -955,7 +955,7 @@ with col6:
     st.metric("Economy Size", f"${final_gdp:,.0f}B", f"${policy_impact_abs:+,.0f}B", delta_color=delta_color)
 
 # Comprehensive Analysis Tabs
-st.subheader("📈 Integrated Economic Analysis")
+st.subheader("📈 Economic Analysis")
 
 tabs = st.tabs([
     "Macro Dashboard", "Fiscal Analysis", "Fiscal Stance", "Distribution Impact", 
