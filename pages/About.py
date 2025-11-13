@@ -28,11 +28,11 @@ st.download_button(
 st.markdown("---")
 st.subheader("About the Developer")
 st.write("""
-**Ahmad Ilu** is a Nigerian Economist and data scientist with a passion for leveraging technology
+**Ahmad Ilu** is a Nigerian Economist and Data Scientist with a passion for leveraging technology
 to solve economic problems. He holds a Bachelor's degree in Economics from Northwest University Kano
 and a Master's degree (Msc Economics) from Bayero University Kano.
 I am passionate about linking economic research with real-world, machine learning applications, 
-designing simulations, causal analyses, and policy evaluations that improve decision-making.
+designing simulations, causal inference analysIs, and policy evaluations that improve decision-making.
 I remain committed to expanding my knowledge of complex macroeconomic models, data-driven approaches,
 and research tools to deliver accurate, impactful, and forward-looking analysis.
 """)
