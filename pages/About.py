@@ -37,34 +37,34 @@ I remain committed to expanding my knowledge of complex macroeconomic models, da
 and research tools to deliver accurate, impactful, and forward-looking analysis.
 """)
 
+
 st.markdown("""
-<br>
+            ### Connect with Me
+<style>
+.social-icons {
+    display: flex;
+    justify-content: left align-items: center;
+    gap: 25px;
+    padding-top: 20px;
+}
+.social-icons img {
+    width: 32px;
+    height: 32px;
+}
+</style>
 
-### Connect with Me
-
-<div style='display: flex; gap: 15px; align-items: center;'>
-
-<!-- Twitter -->
-<a href='https://twitter.com/Iluahmad_' target='_blank'>
-<img src='https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg' width='28'/>
-</a>
-
-<!-- LinkedIn -->
-<a href='http://linkedin.com/in/ahmadilu' target='_blank'>
-<img src='https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg' width='28'/>
-</a>
-
-<!-- GitHub -->
-<a href='https://github.com/Iluahmad' target='_blank'>
-<img src='https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg' width='28'/>
-</a>
-
-<!-- Gmail -->
-<a href='mailto:aii2400012.pec@buk.edu.ng' target='_blank'>
-<img src='https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg' width='28'/>
-</a>
-
+<div class="social-icons">
+    <a href="https://twitter.com/Iluahmad_" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg">
+    </a>
+    <a href="https://linkedin.com/in/ahmadilu" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg">
+    </a>
+    <a href="https://github.com/Iluahmad" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg">
+    </a>
+    <a href="mailto:aii2400012.pec@buk.edu.ng" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png">
+    </a>
 </div>
-
 """, unsafe_allow_html=True)
-
