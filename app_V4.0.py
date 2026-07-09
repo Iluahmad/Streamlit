@@ -37,8 +37,45 @@ st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 html,body,[class*="css"]{{font-family:'Inter',sans-serif;color:{G['txt']};}}
-#MainMenu,footer,header{{visibility:hidden;}}
+footer{{visibility:hidden;}}
+footer::after{{content:'';display:none;}}
 .block-container{{padding-top:1.5rem;padding-bottom:2rem;}}
+
+/* ---- TOP-RIGHT TOOLBAR — keep visible (Share, GitHub, menu) ---- */
+header[data-testid="stHeader"] {{
+    visibility:visible !important;
+    background:transparent !important;
+    border-bottom: 1px solid {G['border']};
+}}
+header[data-testid="stHeader"] * {{
+    visibility:visible !important;
+}}
+/* Subtle style for toolbar buttons */
+header[data-testid="stHeader"] button {{
+    color:{G['txt2']};
+    border-radius:8px;
+    transition: background 0.15s;
+}}
+header[data-testid="stHeader"] button:hover {{
+    background:rgba(0,0,0,0.06);
+}}
+
+/* ---- SIDEBAR COLLAPSE ARROW — always visible ---- */
+[data-testid="collapsedControl"],
+[data-testid="baseButton-headerNoPadding"],
+button[kind="headerNoPadding"],
+.st-emotion-cache-1dp5vir,
+section[data-testid="stSidebar"] > div > div > div > div > div > button {{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+}}
+/* Ensure sidebar toggle button is always on top */
+[data-testid="stSidebarCollapsedControl"] {{
+    display:flex !important;
+    visibility:visible !important;
+    z-index:9999 !important;
+}}
 
 .hero{{background:linear-gradient(135deg,{G['green']} 0%,#005a36 100%);border-radius:16px;padding:2rem 2.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}}
 .hero::before{{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.05);}}
@@ -697,7 +734,7 @@ with ec3:
         "parameters": {"growth": baseline_growth, "tax": tax_change, "spending": spending_change,
                        "oil_shock": oil_price_shock, "monetary": monetary_response,
                        "reform": structural_reform, "progressive_tax": progressive_tax, "pro_poor": pro_poor_spending},
-        "outcomes": {"streamlit run app.pyavg_growth": round(avg_growth,2), "end_debt_gdp": round(debt_end,2),
+        "outcomes": {"avg_growth": round(avg_growth,2), "end_debt_gdp": round(debt_end,2),
                      "end_inflation": round(inf_end,2), "avg_fiscal_impulse": round(avg_impulse,2),
                      "end_gini": round(gini_end,2), "dsr_end": round(dsr_end,2)},
     }
